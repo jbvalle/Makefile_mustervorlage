@@ -8,24 +8,25 @@
 CC = gcc
 
 #declare all linkerflags
-LINKERFLAG = -lm -g -Wall -Wextra -pedantic
-
+CFLAGS = -g -Wall -Wall -Wextra -pedantic
+LFLAGS= -lm
 #declare Sources and Binaries
 SRCS := $(wildcard *.c)
+OBJF := $(SRCS:%.c=%.o)
 BINS := $(SRCS:%.c=%)
 
 #define the "all" target
-all: ${BINS}
+all: $(OBJF) $(BINS) cleanobj
 
 #target <- objectfiles
 %: %.o
-	echo "Checking..."
-	${CC} -o $@ $< ${LINKERFLAG}
+	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
 
-#object <- c-files
 %.o: %.c
-	echo "Creating Object Files..."
-	${CC} -c $<
+	$(CC) -c $^
+
+cleanobj:
+	rm *.o
 
 #clean target
 clean:
